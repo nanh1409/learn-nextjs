@@ -1,13 +1,11 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import Header from '../components/common/header';
+// import Header from '../components/common/header';
 import { AdminLayout, MainLayout } from '../components/layout';
-// import dynamic from 'next/dynamic';
+import styles from '../styles/Home.module.css';
+import Link from 'next/link';
 
-// const Header = dynamic(() => import('../components/common/header'), {
-//   ssr: true,
-// });
 export interface AboutPageProps {}
 
 export default function AboutPage() {
@@ -17,8 +15,6 @@ export default function AboutPage() {
   const page = router.query.page;
 
   useEffect(() => {
-    if (!page) return;
-
     (async () => {
       const response = await fetch(`https://js-post-api.herokuapp.com/api/posts?_page=${page}`);
       const data = await response.json();
@@ -26,6 +22,8 @@ export default function AboutPage() {
       setPostList(data.data);
     })();
   }, [page]);
+
+  if (!page) return;
 
   function handleNextPage() {
     router.push(
@@ -42,17 +40,20 @@ export default function AboutPage() {
 
   return (
     <div>
-      <h1>About Page</h1>
-      <Header />
+      <h1 style={{ fontWeight: 'bold', fontSize: '50px' }}>About Page</h1>
 
       <ul className="post-list">
-        {postList.map((post: any) => (
+        {postList?.map((post: any) => (
           <li key={post.id}>
-            {post.id} - {post.title}
+            <Link href={`/test/${post.id}`}>
+              {post.id} - {post.title}
+            </Link>
           </li>
         ))}
       </ul>
-      <button onClick={handleNextPage}>Next page</button>
+      <button className={styles.button} onClick={handleNextPage}>
+        Next page
+      </button>
     </div>
   );
 }
@@ -60,7 +61,6 @@ export default function AboutPage() {
 AboutPage.Layout = AdminLayout;
 
 export async function getStaticProps() {
-  console.log('get Static Props');
   return {
     props: {},
   };

@@ -1,22 +1,27 @@
 import * as React from 'react';
 import { authApi } from '../api-client/auth-api';
 import { useAuth } from '../hooks/use-auth';
+import styles from '../styles/Home.module.css';
 import { useRouter } from 'next/router';
 
 export default function LoginPage() {
   const router = useRouter();
   const { profile, login, logout } = useAuth({
-    revalidateOnMount: false,
+    revalidateOnMount: true,
   });
 
   async function handleLogin() {
     try {
       await login();
       console.log('Redirect to dashboard');
-      router.push('/about');
+      // router.push('/about');
     } catch (err) {
       console.log('Failed to login', err);
     }
+  }
+
+  async function handleAbout() {
+    router.push('/about');
   }
 
   async function handleGetProfile() {
@@ -37,14 +42,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
-      <h1>Login Page</h1>
+    <>
+      <h1 style={{ fontWeight: 'bold', fontSize: '50px' }}>Login Page</h1>
 
       <p>Profile: {JSON.stringify(profile || {}, null, 4)}</p>
 
-      <button onClick={handleLogin}>Login</button>
+      <button className={styles.button} onClick={handleLogin}>
+        Login
+      </button>
       {/* <button onClick={handleGetProfile}>Get Profile</button> */}
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+      <button className={styles.button} onClick={handleLogout}>
+        Logout
+      </button>
+      <button className={styles.button} onClick={handleAbout}>
+        About Page
+      </button>
+    </>
   );
 }

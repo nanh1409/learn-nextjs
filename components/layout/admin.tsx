@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Auth } from '../common';
 import { useAuth } from '../../hooks/use-auth';
 import { useRouter } from 'next/router';
+import styles from '../../styles/Home.module.css';
 
 // const Header = dynamic(() => import('../common/header'), { ssr: false });
 
@@ -24,14 +25,18 @@ export function AdminLayout({ children }: LayoutProps) {
 
   return (
     <Auth>
-      <h1>Admin Layout</h1>
-      <div>Sidebar</div>
-
-      <button onClick={handleLogout}>Logout</button>
-
-      <Link href="/">Home</Link>
-      <Link href="/about">About</Link>
       <div>{children}</div>
+
+      <button className={styles.button} onClick={handleLogout}>
+        Logout
+      </button>
+
+      <button className={styles.button}>
+        <Link href="/">Home</Link>
+      </button>
+      <button className={styles.button}>
+        <Link href="/about">About</Link>
+      </button>
     </Auth>
   );
 }

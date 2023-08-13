@@ -1,17 +1,25 @@
+import { LayoutProps } from '../../models';
+import { Stack } from '@mui/material';
+import { Box } from '@mui/system';
 import React from 'react';
-// import dynamic from 'next/dynamic';
-import { LayoutProps } from '../../models/common';
-import Link from 'next/link';
+import { Footer } from '../common';
+import dynamic from 'next/dynamic';
 
-// const Header = dynamic(() => import('../common/header'), { ssr: false });
+const Header = dynamic(() => import('../common/header').then((module) => module.default), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+});
 
 export function MainLayout({ children }: LayoutProps) {
   return (
-    <div>
-      <h1>Main Layout</h1>
-      <Link href="/">Home</Link>
-      <Link href="/about">About</Link>
-      <div>{children}</div>
-    </div>
+    <Stack minHeight="100vh">
+      <Header />
+
+      <Box component="main" flexGrow={1}>
+        {children}
+      </Box>
+
+      <Footer />
+    </Stack>
   );
 }
